@@ -29,6 +29,30 @@ module spin_spiral(slices = 4, arc = 360, radius = 100, thickness = 5, offset = 
     }
 }
 
+module assemble(slices = 4, arc = 360, radius = 100, thickness = 5, top = false) {
+    difference() {
+        union() {
+            cylinder(1, r = rad + thick + off);
+            
+            // Uncomment notches here for bottom half
+            
+            linear_extrude(ex_height)
+            spin_spiral(slices = cups, radius = rad, thickness = thickness, offset = off);
+        }
+        
+        rotate([0,0,5])
+        translate([0,0,1])
+        linear_extrude(ex_height - .5)
+        
+        spin_spiral(slices = cups, radius = rad, thickness = thickness, offset = off);
+        
+        // Uncomment notches here for top half
+
+        translate([0,0,-1*ex_height/2])
+        cylinder(ex_height*2, r=2);
+    }
+}
+
 
 $fa = 1;
 $fn = 100;
@@ -38,28 +62,12 @@ thick = 5;
 cups = 6;
 ex_height = 10;
 off = 1;
+printTop = true;
 
-// Mirror for top half
-mirror()
-difference() {
-    union() {
-        cylinder(1, r = rad + thick + off);
-        
-        // Uncomment notches here for bottom half
-        
-        linear_extrude(ex_height)
-        spin_spiral(slices = cups, radius = rad, thickness = thick, offset = off);
-    }
-    
-    rotate([0,0,5])
-    translate([0,0,1])
-    linear_extrude(ex_height - .5)
-    
-    spin_spiral(slices = cups, radius = rad, thickness = thick, offset = off);
-    
-    // Uncomment notches here for top half
-
-    translate([0,0,-1*ex_height/2])
-    cylinder(ex_height*2, r=2);
+if (printTop) {
+    mirror()
+    assemble(slices = cups, radius = rad, thickness = thick, offset = off, top = true);
 }
-
+else {
+    assemble(slices = cups, radius = rad, thickness = thick, offset = off, top = false);
+}
