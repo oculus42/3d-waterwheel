@@ -1,3 +1,8 @@
+/**
+ * Archimedean Spiral Module from Manticorp
+ * https://www.thingiverse.com/thing:1267784
+ */
+
 // spirals   = how many spirals
 // thickness = how thick you want the arms to be
 // rmax      = maximum radius
