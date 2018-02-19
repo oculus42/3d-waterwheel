@@ -35,18 +35,26 @@ module assemble(slices = 4, arc = 360, radius = 100, thickness = 5, top = false)
             cylinder(1, r = rad + thick + off);
             
             // Uncomment notches here for bottom half
+            if (top) {
+                difference() {
+                    translate([0, 0, 3])
+                    linear_extrude(ex_height)
+                    spin_spiral(slices = cups, radius = rad, thickness = thick - 3, offset = off);
+                    cylinder(ex_height*2, r=10);
+                }
+            }
             
             linear_extrude(ex_height)
             spin_spiral(slices = cups, radius = rad, thickness = thickness, offset = off);
         }
         
+        /*
+        // Notches
         rotate([0,0,5])
         translate([0,0,1])
         linear_extrude(ex_height - .5)
-        
         spin_spiral(slices = cups, radius = rad, thickness = thickness, offset = off);
-        
-        // Uncomment notches here for top half
+        */
 
         translate([0,0,-1*ex_height/2])
         cylinder(ex_height*2, r=2);
